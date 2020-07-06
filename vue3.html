@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    html { background: black; }
+    .duration-4000 {
+      transition-duration: 4000ms;
+    }
+  </style>
+</head>
+<body class="text-gray-100 p-20">
+  <div id="app">
+    <button
+      class="bg-gray-900 focus:outline-none p-2 hover:bg-gray-800 rounded mr-2"
+      @click="reverse"
+    >Reverse Outer</button>
+    <button
+      class="bg-gray-900 focus:outline-none p-2 hover:bg-gray-800 rounded"
+      @click="reverse_inner"
+    >Reverse Inner</button>
+    <div>
+      <div class="matches flex flex-row mt-5">
+        <transition-group move-class="transition-transform duration-4000">
+          <div class="flex flex-col" v-for="(team) in teams" :key="team.name">
+            {{team.name}}
+            <div>
+              <transition-group move-class="transition-transform duration-4000">
+                <div
+                  :class="result ? 'bg-green-500' : 'bg-red-500'"
+                  class="p-1 m-1"
+                  v-for="({against, result}) in team.results"
+                  :key="against"
+                >{{against}}</div>
+              </transition-group>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { ref, createApp } from "https://unpkg.com/vue@3.0.0-beta.18/dist/vue.esm-browser.js";
+
+    const teams = ref([
+      {
+        name: "Team 1",
+        results: [
+          { against: "Team 2", result: 0 },
+          { against: "Team 3", result: 1 },
+          { against: "Team 4", result: 0 }
+        ]
+      },
+      {
+        name: "Team 2",
+        results: [
+          { against: "Team 1", result: 1 },
+          { against: "Team 3", result: 1 },
+          { against: "Team 4", result: 0 }
+        ]
+      }
+    ]);
+
+    function reverse() {
+      teams.value = teams.value.reverse();
+    }
+
+    function reverse_inner() {
+      for (const team of teams.value) {
+        team.results = team.results.reverse();
+      }
+    }
+
+    const App = {
+      setup() {
+        return { teams, reverse, reverse_inner };
+      }
+    };
+
+    createApp(App).mount("#app")
+  </script>  
+</body>
+</html>
