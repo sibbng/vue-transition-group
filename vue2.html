@@ -23,8 +23,8 @@
       @click="reverse_inner"
     >Reverse Inner</button>
     <div>
-      <div>
-        <transition-group move-class="transition-transform duration-4000" class="matches flex flex-row mt-5">
+      <div class="matches mt-5">
+        <transition-group move-class="transition-transform duration-4000" class="flex flex-row">
           <div class="flex flex-col" v-for="(team) in teams" :key="team.name">
             {{team.name}}
             <div>
